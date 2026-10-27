@@ -265,3 +265,71 @@ img {
     @apply bg-background text-foreground;
   }
 }
+
+/* Basic form screen kept separate from the dark programme page. */
+.checkout-dialog {
+  background: white !important;
+  color: black !important;
+  border: 1px solid #777 !important;
+  border-radius: 0 !important;
+  max-width: 600px !important;
+  font-family: 'Times New Roman', serif;
+}
+.checkout-dialog [data-slot='dialog-close'] {
+  color: black !important;
+  background: #ddd !important;
+  border-radius: 0;
+}
+.plain-checkout {
+  padding: 22px;
+}
+.plain-checkout h2 {
+  margin: 22px 0 8px;
+  font:
+    bold 24px 'Times New Roman',
+    serif;
+}
+.plain-checkout p,
+.plain-checkout [data-slot='dialog-description'] {
+  margin: 12px 0;
+  color: black;
+  font-size: 16px;
+  line-height: 1.3;
+}
+.plain-checkout label {
+  display: block;
+  margin: 14px 0 4px;
+}
+.plain-checkout input {
+  display: block;
+  box-sizing: border-box;
+  width: 280px;
+  max-width: 100%;
+  padding: 4px;
+  color: black;
+  background: white;
+  border: 2px inset #bbb;
+  border-radius: 0;
+  font:
+    16px Arial,
+    sans-serif;
+}
+.plain-checkout button {
+  padding: 3px 8px;
+  border: 2px outset #bbb;
+  border-radius: 0;
+  color: black;
+  background: #eee;
+  font:
+    14px Arial,
+    sans-serif;
+}
+.plain-checkout button:disabled {
+  color: #777;
+}
+.plain-checkout [role='alert'] {
+  color: #a00;
+}
+.movie-art img {
+  object-fit: contain;
+}

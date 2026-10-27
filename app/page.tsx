@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState, type SubmitEvent } from 'react';
 import Image from 'next/image';
-import { Check, Clock3, CreditCard, Menu, Search } from 'lucide-react';
+import { Check, Clock3, Menu, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -32,10 +32,8 @@ import { getShowDates } from '@/lib/show-dates';
 
 const genreOptions: { id: 'all' | GenreKey; labelKey: string }[] = [
   { id: 'all', labelKey: 'allFilms' },
-  { id: 'premiere', labelKey: 'premieres' },
-  { id: 'thriller', labelKey: 'thrillers' },
+  { id: 'superhero', labelKey: 'superhero' },
   { id: 'family', labelKey: 'family' },
-  { id: 'arthouse', labelKey: 'arthouse' },
 ];
 
 const seatRows = ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -315,7 +313,8 @@ export default function Home() {
                   <Image
                     fill
                     sizes="(max-width: 540px) 100vw, (max-width: 850px) 50vw, 33vw"
-                    className="object-cover"
+                    className="object-contain"
+                    style={{ objectFit: 'contain' }}
                     src={movie.image}
                     alt={copy.title}
                   />
@@ -528,7 +527,9 @@ export default function Home() {
         open={!!bookingMovie}
         onOpenChange={(open) => !open && setBookingMovie(null)}
       >
-        <DialogContent className="max-h-[94vh] max-w-6xl overflow-x-hidden overflow-y-auto border-white/10 bg-[#0e0d0d]/98 p-0  sm:max-w-6xl">
+        <DialogContent
+          className={`max-h-[94vh] max-w-6xl overflow-x-hidden overflow-y-auto border-white/10 bg-[#0e0d0d]/98 p-0 sm:max-w-6xl ${bookingStep === 'checkout' ? 'checkout-dialog' : ''}`}
+        >
           {bookingMovie && bookingStep === 'seats' && (
             <div className="grid lg:grid-cols-[1fr_320px]">
               <div className="p-5 sm:p-9">
@@ -657,100 +658,48 @@ export default function Home() {
             </div>
           )}
           {bookingMovie && bookingStep === 'checkout' && (
-            <div className="grid min-h-[600px] md:grid-cols-[1fr_330px]">
-              <div className="p-6 sm:p-10">
-                <button
-                  onClick={() => setBookingStep('seats')}
-                  className="mb-7 text-xs font-bold text-white/40 hover:text-primary"
-                >
-                  ← {c.backSeats}
+            <div className="plain-checkout">
+              <button type="button" onClick={() => setBookingStep('seats')}>
+                {c.backSeats}
+              </button>
+              <DialogHeader>
+                <DialogTitle>{c.checkoutTitle}</DialogTitle>
+                <DialogDescription>{c.checkoutText}</DialogDescription>
+              </DialogHeader>
+              <p>
+                {getMovieCopy(bookingMovie, locale).title} ·{' '}
+                {dates[activeDate].date} · {bookingTime}
+              </p>
+              <p>
+                {c.seats}: {selectedSeats.join(', ')} · {c.total}:{' '}
+                {orderTotal.toFixed(2)} €
+              </p>
+              <form onSubmit={submitBooking}>
+                <label htmlFor="checkout-name">{c.name}</label>
+                <input
+                  id="checkout-name"
+                  name="name"
+                  required
+                  minLength={2}
+                  maxLength={80}
+                  placeholder={c.namePlaceholder}
+                  autoComplete="name"
+                />
+                <label htmlFor="checkout-email">{c.emailLabel}</label>
+                <input
+                  id="checkout-email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                />
+                <p>{c.demoNotice}</p>
+                {bookingError && <p role="alert">{bookingError}</p>}
+                <button disabled={bookingSubmitting} type="submit">
+                  {bookingSubmitting ? c.saving : c.confirmOrder}
                 </button>
-                <DialogHeader>
-                  <DialogTitle className="text-3xl font-black tracking-[-.05em]">
-                    {c.checkoutTitle}
-                  </DialogTitle>
-                  <DialogDescription>{c.checkoutText}</DialogDescription>
-                </DialogHeader>
-                <form className="mt-8 grid gap-4" onSubmit={submitBooking}>
-                  <label
-                    htmlFor="checkout-name"
-                    className="grid gap-2 text-xs text-white/50"
-                  >
-                    {c.name}
-                    <Input
-                      id="checkout-name"
-                      name="name"
-                      required
-                      minLength={2}
-                      maxLength={80}
-                      placeholder={c.namePlaceholder}
-                      className="h-12 rounded-xl bg-white/[.045]"
-                    />
-                  </label>
-                  <label
-                    htmlFor="checkout-email"
-                    className="grid gap-2 text-xs text-white/50"
-                  >
-                    {c.emailLabel}
-                    <Input
-                      id="checkout-email"
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="you@example.com"
-                      className="h-12 rounded-xl bg-white/[.045]"
-                    />
-                  </label>
-                  <div className="mt-2 rounded-xl border border-primary/18 bg-primary/[.055] p-4 text-xs leading-relaxed text-white/48">
-                    <CreditCard className="mb-3 size-5 text-primary" />
-                    {c.demoNotice}
-                  </div>
-                  {bookingError && (
-                    <p className="rounded-xl bg-primary/10 p-3 text-xs text-red-200">
-                      {bookingError}
-                    </p>
-                  )}
-                  <Button
-                    disabled={bookingSubmitting}
-                    type="submit"
-                    className="mt-2 h-12 rounded-xl bg-primary font-bold text-white hover:bg-[#ff6258]"
-                  >
-                    {bookingSubmitting
-                      ? c.saving
-                      : `${c.confirmOrder} · ${orderTotal.toFixed(2)} €`}
-                  </Button>
-                </form>
-              </div>
-              <aside className="border-t border-white/8 bg-[#121010] p-7 md:border-l md:border-t-0">
-                <p className="text-[10px] font-bold uppercase tracking-[.13em] text-white/30">
-                  {c.yourOrder}
-                </p>
-                <div className="relative mt-5 h-48 w-full overflow-hidden rounded-xl">
-                  <Image
-                    fill
-                    sizes="330px"
-                    className="object-cover"
-                    src={bookingMovie.image}
-                    alt=""
-                  />
-                </div>
-                <h3 className="mt-5 text-lg font-bold">
-                  {getMovieCopy(bookingMovie, locale).title}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-white/40">
-                  Lumen Rotermann
-                  <br />
-                  {dates[activeDate].day}, {dates[activeDate].date} ·{' '}
-                  {bookingTime}
-                  <br />
-                  Laser Hall 2 · {c.seats.toLowerCase()}{' '}
-                  {selectedSeats.join(', ')}
-                </p>
-                <div className="mt-7 flex justify-between border-t border-white/8 pt-5">
-                  <span className="text-sm text-white/45">{c.total}</span>
-                  <strong>{orderTotal.toFixed(2)} €</strong>
-                </div>
-              </aside>
+              </form>
             </div>
           )}
           {bookingMovie && bookingStep === 'success' && (
