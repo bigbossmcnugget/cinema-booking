@@ -34,3 +34,7 @@ npm run dev
 Репозиторий создан из уже работающей локальной версии. Файлы добавлены тематическими коммитами; их порядок описывает части проекта, а не сроки первоначальной разработки.
 
 Сценарий встречи и идеи развития: [docs/demo-plan.md](docs/demo-plan.md).
+
+Подробный разбор кода и подготовка к защите: [учебное пособие](docs/study-guide.md) и [версия Word](docs/cinema-booking-study-guide.docx).
+
+В демонстрационном каталоге — Batman, The Lego Movie и Superman. Источники постеров: [docs/poster-sources.md](docs/poster-sources.md).
