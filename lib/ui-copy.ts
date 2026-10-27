@@ -4,6 +4,8 @@ type UiCopy = Record<string, string>;
 
 export const ui: Record<Locale, UiCopy> = {
   en: {
+    catalogUnavailable: 'The programme could not be loaded.',
+    retry: 'Try again',
     navShowtimes: 'Showtimes',
     navFilms: 'Films',
     navCinemas: 'Cinemas',
@@ -61,6 +63,8 @@ export const ui: Record<Locale, UiCopy> = {
     authBook: 'Could not complete your booking.',
   },
   ru: {
+    catalogUnavailable: 'Не удалось загрузить программу.',
+    retry: 'Попробовать снова',
     navShowtimes: 'Сеансы',
     navFilms: 'Фильмы',
     navCinemas: 'Кинотеатры',
@@ -118,6 +122,8 @@ export const ui: Record<Locale, UiCopy> = {
     authBook: 'Не удалось оформить заказ.',
   },
   et: {
+    catalogUnavailable: 'Kinokava laadimine ebaõnnestus.',
+    retry: 'Proovi uuesti',
     navShowtimes: 'Seansid',
     navFilms: 'Filmid',
     navCinemas: 'Kinod',
