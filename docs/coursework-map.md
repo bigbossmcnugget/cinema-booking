@@ -1,70 +1,51 @@
-# Lumen и учебные задания
+# One cinema project, several coursework deliverables
 
-Проверено 27 октября 2026 года по двум присланным заданиям и текущему коду. Это аудит и план, а не отметка о выполнении всех требований.
+Updated 27 October 2026 after importing the supplied database design. Based on the user's assignment texts and lesson notes. Exact teacher names and Jira board were not provided.
 
-## Как связаны работы
+## Databases: initial design
 
-Оба задания прямо называют себя Cinema project / Kinoprojekt. Первое продолжает предыдущую работу по проектированию базы (`project.sql`), второе добавляет индексы и план кеширования к тому же кинопроекту. Lumen / cinema-booking может служить общей реализацией: интерфейс показывает результат, backend обрабатывает брони, база хранит данные.
+Evidence: unchanged `database/source/project.sql` and ER diagrams. These came from the supplied ZIP. Current ORM mapping is in `database/schema-mapping.md`, and the generated current SQL is in `database/project.sql`. The archive is a design, not proof that Docker, seeding or backend were previously implemented.
 
-Критерии клиентской встречи относятся к демонстрации, объяснению пользы и планированию дальнейшей работы. Они совместимы с этими техническими заданиями, но не заменяют их. По присланному тексту нельзя подтвердить, что все три преподавателя требуют именно один репозиторий: это организационный вопрос курса.
+## Databases: backend, Docker, ORM and seeder (8 October)
 
-В двух технических заданиях требуется ссылка на репозиторий в Teams. Jira не названа обязательной частью сдачи. Отдельное задание по Jira и текущая доска не предоставлены, поэтому их фактическая связь с Lumen не проверена.
-
-## Сопоставление требований с кодом
-
-| Требование | Сейчас | Что ещё нужно |
+| Criterion | Implementation | Verification / limitation |
 | --- | --- | --- |
-| Язык и ORM, объяснение выбора | TypeScript, React; Drizzle установлен, схема в `db/schema.ts` | Обоснование добавлено в README; рабочий обработчик брони пока использует SQL напрямую |
-| Docker Compose для базы | Отсутствует; D1 локально запускается через среду Cloudflare | Выбрать совместимый с требованиями способ запуска базы и проверить сохранность named volume |
-| ORM-модели, ключи и отношения | Drizzle описывает `bookings` и `booking_seats`, внешний ключ и индексы; миграция сгенерирована | Сверить с исходным `project.sql`; пока его нет, соответствие не подтверждено |
-| Миграции как основной способ создания схемы | Есть сгенерированная миграция, но runtime создаёт таблицы вручную в `ensureDatabase` | Перейти на контролируемое применение миграций и убрать дублирование ручного DDL |
-| Seeder с Faker | Отсутствует | Добавить библиотеку Faker, повторяемый seeder и проверку ссылок |
-| Не менее 100 строк в больших таблицах | Не подтверждено; тестовая бронь не является seeder | Получить минимум 100 записей в каждой большой таблице, входящей в согласованную схему |
-| Запуск: Docker → миграции → seed | README описывает только текущий локальный запуск | После реализации добавить и проверить полный путь с чистой базой |
-| Индексы через ORM | Четыре индекса описаны в Drizzle | Проверить необходимость каждого на реальных запросах; текущие пояснения добавлены в README |
-| Обоснования индексов | Добавлены в README | Индекс email сейчас не используется интерфейсом; не выдавать его за ускорение работающей страницы |
-| План кеширования | Добавлен в README | Фактического кеша пока нет; Redis в задании необязателен |
-| Командные коммиты | История репозитория доступна | Каждый участник делает свои реальные изменения со своим Git-авторством и сдаёт ссылку сам |
+| Language and ORM choice | TypeScript, Drizzle, PostgreSQL; explained in README | Real ORM selects/inserts/transactions in backend/service.ts |
+| Compose database + named volume | docker-compose.yml, postgres:17-alpine, cinema_postgres volume | Configuration supplied; Docker is absent on this computer, container execution/persistence still needs checking |
+| Models/migrations matching project.sql | All 13 source tables in backend/schema.ts, generated migration | Table/column comparison test; deliberate guest changes documented |
+| Faker demo data, >=100 large-table rows | backend/seed.ts: 126 screenings, 120 bookings/tickets/payments/notifications | Isolated test and persistent PGlite preview verified; relational checks in pg:verify |
+| Launch documentation | README: Docker → migrate → seed → verify → API + frontend | PGlite fallback run here; Docker path remains an explicit verification item |
 
-## Почему не достаточно добавить один docker-compose.yml
+## Databases: indexes and cache plan (22 October)
 
-Приложение получает `DB` из `cloudflare:workers`, а `getDb()` настроен на драйвер Drizzle D1. Отдельный контейнер PostgreSQL не станет его базой автоматически. Потребуется сменить адаптер, ORM-схему для выбранного диалекта, миграции и рабочие запросы. Контейнер, который запускается, но не используется backend, не доказывает выполнение общего сценария.
+All indexes are declared through Drizzle. README lists columns, current/planned queries and redundancies. A named index does not prove the planner uses it or a page is faster. Existing future-use indexes are labelled as such. README includes cache keys, TTL and invalidation conditions. Redis/cache implementation is optional in the supplied assignment and is not enabled.
 
-Исходный `project.sql` важен: в нём могут быть фильмы, жанры, залы, места, сеансы, клиенты и билеты с другими типами и связями. Нельзя считать нашу текущую схему из двух таблиц его эквивалентом. Новый SQL-файл, сгенерированный из текущего кода, тоже не докажет совпадение с предыдущей работой.
+## Code review: frontend structure and backend rights
 
-## Порядок доработки
+`app/page.tsx` now composes sections. `components/cinema/` contains smaller UI files and `lib/use-cinema.ts` contains state/requests. This is React, so copying a Vue Router/App.vue pattern literally would be inappropriate; the same separation principle is applied to React components.
 
-1. Найти исходную модель базы или согласовать восстановленную модель. Результат: таблица соответствия каждой таблицы, поля и связи.
-2. Подтвердить диалект базы. TypeScript и Drizzle можно сохранить; переход к Docker-базе должен включать реально работающий адаптер backend.
-3. Добавить Compose, named volume, healthcheck и пример настроек без секретов. Проверить остановку и повторный запуск без потери записей.
-4. Описать согласованные таблицы через ORM, сгенерировать миграции инструментом ORM и применить их на пустой базе.
-5. Реализовать Faker-seeder в порядке зависимостей: справочники → фильмы/залы/места → сеансы → брони/билеты. Не допускать повторного места на одном сеансе. Проверить количество строк и отсутствие потерянных внешних ключей.
-6. Подключить интерфейс к тем же данным, если он остаётся демонстрацией этой базы. Бронь из формы должна появляться в запущенной через Docker базе.
-7. Добавить индексы под реальные SQL-запросы, пояснить их в README и проверить планы выполнения. Не добавлять индекс названия фильма для поиска, который всё ещё выполняется по массиву JavaScript.
-8. Проверить весь README на чистом запуске и сделать короткий показ создания брони. Redis оставить дополнительной задачей после обязательной части.
+The public API only permits validated guest bookings and read-only catalogue/seat requests. Administrative movie changes require a private server-side token; hidden buttons and a client-supplied role cannot grant access. Tests show rejection without valid authorization. There is no complete user-role login system.
 
-До шага 1 можно готовить требования, план кеширования и пояснения существующих индексов. Совпадение схемы нельзя объявить проверенным без исходного материала.
+GitHub issues in bigbossmcnugget/cinema-booking were checked on 27 October: none exist. No review issues were closed or declared fixed on another repository. Issues from the original class repository must be examined separately if supplied.
 
-## Как использовать Jira
+## Project work / client presentation
 
-Jira может хранить план той же работы, GitHub — код и коммиты, Teams — ссылку для сдачи. Это разные роли, а не три разных реализации сайта. Автоматическая связь GitHub и Jira требует настроенной интеграции; реальный ключ задачи указывают в имени ветки, коммите или заголовке PR. Здесь интеграция не настраивалась и задачи в чужую доску не создавались.
+Show a visitor selecting a film/date, choosing seats, completing the white guest form, receiving a reference, and then seeing the same seats unavailable after reload. Explain customer value before code. Each teammate prepares a real next-month improvement with effort estimate and questions for the client. Keep the meeting within 15 minutes. The study guide describes the updated implementation and known limits.
 
-Ниже заготовки задач для вашей доски. Это названия, а не выдуманные Jira-ключи. Ответственных назначает команда.
+## How Jira could connect these subjects
 
-| Задача | Критерий готовности | Зависимость |
-| --- | --- | --- |
-| Сверить кино-схему с project.sql | Каждая исходная таблица, поле, тип и связь сопоставлены с ORM | Исходная работа |
-| Подключить Docker-базу к backend | База запускается Compose, API использует её, named volume переживает пересоздание контейнера | Согласованный диалект |
-| Описать модели и миграции ORM | Пустая база разворачивается миграциями, связи проверены | Сверка схемы |
-| Добавить Faker-seeder | В больших таблицах ≥100 строк, внешние ключи корректны, места не дублируются | Миграции |
-| Проверить бронирование через сайт | Новая бронь видна в базе, повтор того же места отклоняется | Backend и demo-данные |
-| Добавить индексы под запросы | Индексы заданы через ORM, для каждого указан реальный запрос | Рабочие запросы |
-| Описать кеширование | Указаны ключи, TTL, условия сброса; занятость мест проверяется в базе | Запросы и индексы |
-| Проверить README и показ | Другой участник запускает проект по README и делает бронь | Предыдущие задачи |
+Jira is a plan/task tracker, GitHub stores code, Teams receives each student's submission link. The two supplied database assignments do not explicitly require Jira. Actual Jira project/board linkage is unverified, and no tasks were created remotely.
 
-Состояние «Done» ставят после выполнения критерия, а не после создания карточки. Коммит со ссылкой на задачу должен содержать соответствующее изменение. Подготовка плана сама по себе не означает реализацию Docker или seeder.
+`docs/jira-backlog.csv` is a local import draft. Tasks are proposed, not claims of historical work or teammate assignments. Use real issue keys only after tasks exist. With a configured GitHub/Jira integration, add the real key to the branch, commit or PR title; do not invent a board prefix. Current implementation commits keep their actual timestamps and authors.
 
-Документация Atlassian:
+Official references: [GitHub connection](https://support.atlassian.com/jira-cloud-administration/docs/integrate-with-github/), [linking development activity](https://support.atlassian.com/jira-cloud-administration/docs/use-the-github-for-jira-app/).
 
-- [Подключение GitHub Cloud к Jira](https://support.atlassian.com/jira-cloud-administration/docs/integrate-with-github/).
-- [Связь веток, коммитов и PR с задачами Jira](https://support.atlassian.com/jira-cloud-administration/docs/use-the-github-for-jira-app/).
+## Remaining checks before submission
+
+1. Run the documented Docker path on a machine with Docker and verify records survive `docker compose down` followed by `up` (without `-v`).
+2. Run schema/data checks against that PostgreSQL instance: `npm run pg:verify`.
+3. Add the source design contributor's real name/repository to provenance and agree team responsibilities.
+4. Check the teacher's actual review issues if they live in another repository; link real Jira tasks if required by that subject.
+5. Each student submits their own link in Teams and can explain their actual contribution.
+
+The code can serve all these deliverables, but one repository alone does not establish that every teacher's organizational requirements are satisfied.

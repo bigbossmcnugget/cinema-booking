@@ -1,0 +1,9 @@
+Summary,Description,Issue Type,Labels
+Verify Docker PostgreSQL on a second machine,"Database coursework: follow README from a fresh named volume; migrate, seed, verify, restart without deleting volume and confirm data persists. Do not mark done until Docker is actually run.",Task,"database,docker"
+Review imported schema with the design contributor,"Confirm source author/repository, review guest-booking amendment and the 13-table ORM mapping.",Task,"database,team"
+Check teacher review issues in the original repository,"Obtain the actual reviewed repo; evaluate each issue, fix or explain it, then close it with evidence. No issues were found in cinema-booking.",Task,"review,team"
+Review indexes with query plans,"Compare actual PostgreSQL EXPLAIN plans, remove redundant hall/start index if justified; do not claim unmeasured speedups.",Task,"database,indexes"
+Implement booking cancellation and expiry,Define seat-release policy first; original unique constraint also includes cancelled tickets. Validate concurrent reservation behavior.,Task,backend
+Prepare each teammate client proposal,"Each person explains one next-month improvement, customer benefit and estimated hours; prepare a small Figma mockup.",Task,"presentation,team"
+Implement catalogue cache after correctness checks,"Use date/query/genre key, TTL 60s, invalidate after successful metadata/schedule/price changes. Keep occupancy uncached. Optional assignment extension.",Task,"backend,cache"
+Rehearse the 15-minute demonstration,"Run full guest booking, reload to confirm occupied seats, show code evidence and record client feedback.",Task,presentation
