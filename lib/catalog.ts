@@ -1,6 +1,5 @@
 export type Locale = 'en' | 'ru' | 'et';
-
-export type GenreKey = 'premiere' | 'thriller' | 'family' | 'arthouse';
+export type GenreKey = 'superhero' | 'family';
 
 export type MovieCopy = {
   title: string;
@@ -16,226 +15,110 @@ export type Movie = MovieCopy & {
   backdrop: string;
   times: string[];
   genre: GenreKey[];
-  rating: string;
   price: number;
   translations: Record<Exclude<Locale, 'en'>, MovieCopy>;
 };
 
+// Film titles are real; prices, showtimes and subtitle availability are demo data.
 export const movies: Movie[] = [
   {
-    id: 'night-side',
-    title: 'The Other Side of Night',
-    meta: '16+ · Thriller · 1h 47m',
-    image: '/images/night-side.jpg',
-    backdrop: '/images/backdrop-night.jpg',
-    times: ['17:40', '19:20', '21:50'],
-    badge: 'Premiere',
-    genre: ['premiere', 'thriller'],
-    rating: '8.1',
-    price: 11.9,
-    language: 'EN · RU/ET subtitles',
-    description:
-      'A photographer spots a stranger in his night images whom nobody else can see. The search leads him to the secret of a vanished city block.',
+    id: 'batman-1989',
+    title: 'Batman',
+    meta: '1989 · Superhero · 126 min',
+    badge: '1989',
+    description: 'Batman protects Gotham City from the Joker.',
+    language: 'EN · RU/ET subtitles (demo)',
+    image: '/images/batman-1989.jpg',
+    backdrop: '/images/batman-1989.jpg',
+    times: ['17:00', '19:30'],
+    genre: ['superhero'],
+    price: 7,
     translations: {
       ru: {
-        title: 'Другая сторона ночи',
-        meta: '16+ · Триллер · 1 ч 47 мин',
-        badge: 'Премьера',
-        language: 'EN · субтитры RU/ET',
-        description:
-          'Фотограф замечает на своих ночных снимках незнакомку, которую никто больше не видит. Поиски приводят его к тайне исчезнувшего квартала.',
+        title: 'Бэтмен',
+        meta: '1989 · Супергерои · 126 мин',
+        badge: '1989',
+        description: 'Бэтмен защищает Готэм от Джокера.',
+        language: 'EN · субтитры RU/ET (демо)',
       },
       et: {
-        title: 'Öö teine pool',
-        meta: '16+ · Põnevik · 1 h 47 min',
-        badge: 'Esilinastus',
-        language: 'EN · RU/ET subtiitrid',
-        description:
-          'Fotograaf märkab oma öistel piltidel võõrast, keda keegi teine ei näe. Otsing viib ta kadunud linnakvartali saladuseni.',
+        title: 'Batman',
+        meta: '1989 · Superkangelased · 126 min',
+        badge: '1989',
+        description: 'Batman kaitseb Gotham Cityt Jokkeri eest.',
+        language: 'EN · RU/ET subtiitrid (demo)',
       },
     },
   },
   {
-    id: 'rain-city',
-    title: 'City After Rain',
-    meta: '12+ · Drama · 2h 04m',
-    image: '/images/rain-city.jpg',
-    backdrop: '/images/backdrop-rain.jpg',
-    times: ['16:15', '18:45', '20:30'],
-    badge: 'Lumen Selection',
-    genre: ['arthouse'],
-    rating: '7.8',
-    price: 10.9,
-    language: 'ET · RU/EN subtitles',
+    id: 'lego-movie',
+    title: 'The Lego Movie',
+    meta: '2014 · Animation · 100 min',
+    badge: '2014',
     description:
-      'One long walk through a rain-soaked city changes the lives of three strangers. A quiet story about chance, memory and second chances.',
-    translations: {
-      ru: {
-        title: 'Город после дождя',
-        meta: '12+ · Драма · 2 ч 04 мин',
-        badge: 'Выбор Lumen',
-        language: 'ET · субтитры RU/EN',
-        description:
-          'Одна длинная прогулка по мокрому городу меняет жизни трёх незнакомцев. Тихое кино о случайностях, памяти и втором шансе.',
-      },
-      et: {
-        title: 'Linn pärast vihma',
-        meta: '12+ · Draama · 2 h 04 min',
-        badge: 'Lumeni valik',
-        language: 'ET · RU/EN subtiitrid',
-        description:
-          'Üks pikk jalutuskäik vihmases linnas muudab kolme võõra elu. Vaikne lugu juhusest, mälust ja uutest võimalustest.',
-      },
-    },
-  },
-  {
-    id: 'zero-orbit',
-    title: 'Zero Orbit',
-    meta: '12+ · Sci-fi · 1h 56m',
-    image: '/images/zero-orbit.jpg',
-    backdrop: '/images/backdrop-orbit.jpg',
-    times: ['15:50', '18:10', '22:20'],
-    badge: 'Dolby Atmos',
-    genre: ['premiere'],
-    rating: '8.4',
-    price: 13.9,
-    language: 'EN · RU/ET subtitles',
-    description:
-      'The crew of the first private space station loses contact with Earth and discovers a signal no human could have sent.',
-    translations: {
-      ru: {
-        title: 'Нулевая орбита',
-        meta: '12+ · Фантастика · 1 ч 56 мин',
-        badge: 'Dolby Atmos',
-        language: 'EN · субтитры RU/ET',
-        description:
-          'Экипаж первой частной станции теряет связь с Землёй и обнаруживает сигнал, который не мог быть отправлен человеком.',
-      },
-      et: {
-        title: 'Nullorbiit',
-        meta: '12+ · Ulme · 1 h 56 min',
-        badge: 'Dolby Atmos',
-        language: 'EN · RU/ET subtiitrid',
-        description:
-          'Esimese erajaama meeskond kaotab ühenduse Maaga ja avastab signaali, mida ükski inimene poleks saanud saata.',
-      },
-    },
-  },
-  {
-    id: 'last-stop',
-    title: 'Last Stop',
-    meta: '16+ · Crime · 1h 52m',
-    image: '/images/last-stop.jpg',
-    backdrop: '/images/backdrop-rain.jpg',
-    times: ['14:30', '19:00', '21:35'],
-    badge: 'New release',
-    genre: ['premiere', 'thriller'],
-    rating: '7.6',
-    price: 10.9,
-    language: 'RU · ET subtitles',
-    description:
-      'A night driver takes one last fare and lands between two people ready to do anything for the contents of a forgotten suitcase.',
-    translations: {
-      ru: {
-        title: 'Последняя остановка',
-        meta: '16+ · Криминал · 1 ч 52 мин',
-        badge: 'Новинка',
-        language: 'RU · субтитры ET',
-        description:
-          'Ночной водитель получает последний заказ и оказывается между двумя людьми, которые готовы на всё ради содержимого забытого чемодана.',
-      },
-      et: {
-        title: 'Viimane peatus',
-        meta: '16+ · Krimi · 1 h 52 min',
-        badge: 'Uus',
-        language: 'RU · ET subtiitrid',
-        description:
-          'Öine juht võtab viimase tellimuse ja satub kahe inimese vahele, kes on unustatud kohvri sisu nimel valmis kõigeks.',
-      },
-    },
-  },
-  {
-    id: 'signal',
-    title: 'Signal in the Silence',
-    meta: '6+ · Adventure · 1h 34m',
-    image: '/images/signal.jpg',
-    backdrop: '/images/backdrop-orbit.jpg',
-    times: ['12:10', '14:20', '16:40'],
-    badge: 'Family film',
+      'An ordinary LEGO builder joins a team trying to save their world.',
+    language: 'EN · RU/ET subtitles (demo)',
+    image: '/images/lego-movie.jpg',
+    backdrop: '/images/lego-movie.jpg',
+    times: ['12:00', '15:00'],
     genre: ['family'],
-    rating: '8.0',
-    price: 8.9,
-    language: 'RU dub · ET',
-    description:
-      'A brother and sister find an old radio transmitter and follow a voice calling them from a distant island.',
+    price: 6,
     translations: {
       ru: {
-        title: 'Сигнал в тишине',
-        meta: '6+ · Приключения · 1 ч 34 мин',
-        badge: 'Семейное кино',
-        language: 'RU дубляж · ET',
+        title: 'Лего Фильм',
+        meta: '2014 · Мультфильм · 100 мин',
+        badge: '2014',
         description:
-          'Брат и сестра находят старый радиопередатчик и отправляются навстречу голосу, который зовёт их с далёкого острова.',
+          'Обычный строитель LEGO присоединяется к команде, которая пытается спасти свой мир.',
+        language: 'EN · субтитры RU/ET (демо)',
       },
       et: {
-        title: 'Signaal vaikuses',
-        meta: '6+ · Seiklus · 1 h 34 min',
-        badge: 'Perefilm',
-        language: 'RU dubleering · ET',
+        title: 'LEGO film',
+        meta: '2014 · Animatsioon · 100 min',
+        badge: '2014',
         description:
-          'Õde ja vend leiavad vana raadiosaatja ning lähevad otsima häält, mis kutsub neid kaugelt saarelt.',
+          'Tavaline LEGO ehitaja ühineb meeskonnaga, et päästa oma maailm.',
+        language: 'EN · RU/ET subtiitrid (demo)',
       },
     },
   },
   {
-    id: 'lost-light',
-    title: 'Lost Light',
-    meta: '12+ · Romance · 1h 43m',
-    image: '/images/lost-light.jpg',
-    backdrop: '/images/backdrop-night.jpg',
-    times: ['13:25', '17:10', '20:10'],
-    badge: 'Only at Lumen',
-    genre: ['arthouse'],
-    rating: '7.9',
-    price: 9.9,
-    language: 'FR · RU/ET subtitles',
+    id: 'superman-1978',
+    title: 'Superman',
+    meta: '1978 · Superhero · 143 min',
+    badge: '1978',
     description:
-      'A restorer of vintage signs and an architect meet in a city preparing to switch off its last neon light forever.',
+      'Clark Kent uses his powers to help people and stop Lex Luthor.',
+    language: 'EN · RU/ET subtitles (demo)',
+    image: '/images/superman-1978.jpg',
+    backdrop: '/images/superman-1978.jpg',
+    times: ['16:00', '20:00'],
+    genre: ['superhero'],
+    price: 7,
     translations: {
       ru: {
-        title: 'Потерянный свет',
-        meta: '12+ · Мелодрама · 1 ч 43 мин',
-        badge: 'Только в Lumen',
-        language: 'FR · субтитры RU/ET',
-        description:
-          'Реставратор старых вывесок и архитектор встречаются в городе, который готовится навсегда выключить свой последний неон.',
+        title: 'Супермен',
+        meta: '1978 · Супергерои · 143 мин',
+        badge: '1978',
+        description: 'Кларк Кент помогает людям и противостоит Лексу Лютору.',
+        language: 'EN · субтитры RU/ET (демо)',
       },
       et: {
-        title: 'Kadunud valgus',
-        meta: '12+ · Romantika · 1 h 43 min',
-        badge: 'Ainult Lumenis',
-        language: 'FR · RU/ET subtiitrid',
-        description:
-          'Vanade valgusreklaamide restauraator ja arhitekt kohtuvad linnas, mis valmistub oma viimast neoonvalgust igaveseks kustutama.',
+        title: 'Superman',
+        meta: '1978 · Superkangelased · 143 min',
+        badge: '1978',
+        description: 'Clark Kent aitab inimesi ja peatab Lex Luthori plaani.',
+        language: 'EN · RU/ET subtiitrid (demo)',
       },
     },
   },
 ];
 
 export function getMovieCopy(movie: Movie, locale: Locale): MovieCopy {
-  if (locale === 'en') {
-    return {
-      title: movie.title,
-      meta: movie.meta,
-      badge: movie.badge,
-      description: movie.description,
-      language: movie.language,
-    };
-  }
-  return movie.translations[locale];
+  return locale === 'en' ? movie : movie.translations[locale];
 }
 
-export function getMoviePriceCents(titleOrId: string) {
+export function getMoviePriceCents(titleOrId: string): number | null {
   const movie = movies.find(
     (item) =>
       item.id === titleOrId ||
