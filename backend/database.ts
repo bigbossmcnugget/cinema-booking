@@ -8,11 +8,12 @@ import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import postgres from 'postgres';
 import { mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as schema from './schema';
 
 export type Database = PgDatabase<PgQueryResultHKT, typeof schema>;
 export async function connectDatabase() {
-  const migrationsFolder = new URL('./migrations', import.meta.url).pathname;
+  const migrationsFolder = fileURLToPath(new URL('./migrations', import.meta.url));
   if (process.env.DB_DRIVER === 'pglite') {
     const path = process.env.PGLITE_PATH || './.data/postgres';
     if (path !== 'memory://')
