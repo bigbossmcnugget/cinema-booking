@@ -6,7 +6,7 @@ process.env.DB_DRIVER = 'pglite';
 
 export {};
 
-if (command === 'server') await import('./server');
+if (command === 'server') await (await import('./server')).startApiServer();
 else if (command === 'prepare') await import('./prepare');
 else {
   console.error('Usage: tsx backend/local.ts <server|prepare>');

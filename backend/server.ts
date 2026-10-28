@@ -124,10 +124,7 @@ export function createApiServer(db: Database, driver: string) {
   );
 }
 
-if (
-  process.argv[1] &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+export async function startApiServer() {
   const connection = await connectDatabase();
   const server = createApiServer(connection.db, connection.driver);
   server.listen(Number(process.env.API_PORT || 3001), '127.0.0.1', () =>
@@ -141,4 +138,12 @@ if (
     });
   process.on('SIGINT', stop);
   process.on('SIGTERM', stop);
+  return server;
+}
+
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  await startApiServer();
 }
