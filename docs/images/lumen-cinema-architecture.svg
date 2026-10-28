@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960" role="img" aria-labelledby="title desc">
+  <title id="title">Lumen Cinema three tier software architecture</title>
+  <desc id="desc">Customer and administrator clients communicate by HTTP JSON with the Node API. The API validates requests and calls catalogue, booking, and administration services. Drizzle ORM communicates with PostgreSQL or the local PGlite fallback. PostgreSQL data persists in a named Docker volume.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L12,6 L0,12 z" fill="#315A7D"/>
+    </marker>
+    <style>
+      .title { font: 700 38px Arial, sans-serif; fill: #15324B; }
+      .subtitle { font: 400 21px Arial, sans-serif; fill: #506678; }
+      .tier { font: 700 20px Arial, sans-serif; letter-spacing: 1.5px; fill: #315A7D; }
+      .box-title { font: 700 25px Arial, sans-serif; fill: #15324B; }
+      .box-text { font: 400 19px Arial, sans-serif; fill: #405565; }
+      .small-title { font: 700 20px Arial, sans-serif; fill: #15324B; }
+      .small-text { font: 400 17px Arial, sans-serif; fill: #405565; }
+      .edge { fill: none; stroke: #315A7D; stroke-width: 4; marker-end: url(#arrow); }
+      .edge-dashed { fill: none; stroke: #687C8B; stroke-width: 3; stroke-dasharray: 10 9; marker-end: url(#arrow); }
+      .edge-label { font: 700 17px Arial, sans-serif; fill: #315A7D; }
+      .group { fill: #F6F9FC; stroke: #9DB2C3; stroke-width: 2; stroke-dasharray: 8 7; }
+      .client { fill: #EAF3FA; stroke: #78A3C1; stroke-width: 3; }
+      .application { fill: #EDF6F2; stroke: #6FA38B; stroke-width: 3; }
+      .service { fill: #FFFFFF; stroke: #A7B8C5; stroke-width: 2; }
+      .data { fill: #FFF5E8; stroke: #C69656; stroke-width: 3; }
+      .storage { fill: #F4EDFA; stroke: #9B75B7; stroke-width: 3; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="960" rx="28" fill="#FFFFFF"/>
+  <text class="title" x="800" y="58" text-anchor="middle">Lumen Cinema Software Architecture</text>
+  <text class="subtitle" x="800" y="92" text-anchor="middle">Layered three tier client server architecture</text>
+
+  <text class="tier" x="70" y="154">CLIENT LAYER</text>
+  <rect class="client" x="70" y="176" width="440" height="150" rx="18"/>
+  <text class="box-title" x="290" y="222" text-anchor="middle">Customer Browser</text>
+  <text class="box-text" x="290" y="257" text-anchor="middle">React and Vinext interface</text>
+  <text class="box-text" x="290" y="287" text-anchor="middle">Catalogue search seats checkout</text>
+
+  <rect class="client" x="1090" y="176" width="440" height="150" rx="18"/>
+  <text class="box-title" x="1310" y="222" text-anchor="middle">Administrator Client</text>
+  <text class="box-text" x="1310" y="257" text-anchor="middle">Authorised API request</text>
+  <text class="box-text" x="1310" y="287" text-anchor="middle">Film description and visibility</text>
+
+  <text class="tier" x="70" y="388">APPLICATION LAYER</text>
+  <rect class="application" x="350" y="412" width="900" height="250" rx="22"/>
+  <text class="box-title" x="800" y="454" text-anchor="middle">Node.js HTTP API</text>
+  <text class="box-text" x="800" y="485" text-anchor="middle">Routes requests and returns JSON responses</text>
+
+  <rect class="service" x="395" y="520" width="245" height="100" rx="14"/>
+  <text class="small-title" x="517" y="554" text-anchor="middle">Validation</text>
+  <text class="small-text" x="517" y="584" text-anchor="middle">Zod schemas</text>
+  <text class="small-text" x="517" y="608" text-anchor="middle">Admin guard</text>
+
+  <rect class="service" x="677" y="520" width="245" height="100" rx="14"/>
+  <text class="small-title" x="799" y="554" text-anchor="middle">Catalogue Service</text>
+  <text class="small-text" x="799" y="584" text-anchor="middle">Films genres</text>
+  <text class="small-text" x="799" y="608" text-anchor="middle">Daily showtimes</text>
+
+  <rect class="service" x="960" y="520" width="245" height="100" rx="14"/>
+  <text class="small-title" x="1082" y="554" text-anchor="middle">Booking Service</text>
+  <text class="small-text" x="1082" y="584" text-anchor="middle">Seat conflicts pricing</text>
+  <text class="small-text" x="1082" y="608" text-anchor="middle">Atomic transaction</text>
+
+  <path class="edge" d="M510 251 C620 251 620 412 690 412"/>
+  <text class="edge-label" x="565" y="313">HTTP JSON through /api</text>
+  <path class="edge" d="M1090 251 C980 251 980 412 910 412"/>
+  <text class="edge-label" x="1040" y="313" text-anchor="end">Bearer HTTP JSON</text>
+
+  <text class="tier" x="70" y="725">DATA LAYER</text>
+  <rect class="data" x="120" y="754" width="350" height="142" rx="18"/>
+  <text class="box-title" x="295" y="802" text-anchor="middle">Drizzle ORM</text>
+  <text class="box-text" x="295" y="837" text-anchor="middle">Typed queries migrations</text>
+  <text class="box-text" x="295" y="867" text-anchor="middle">SQL transactions and indexes</text>
+
+  <rect class="storage" x="625" y="754" width="350" height="142" rx="18"/>
+  <text class="box-title" x="800" y="802" text-anchor="middle">PostgreSQL 17</text>
+  <text class="box-text" x="800" y="837" text-anchor="middle">13 relational tables</text>
+  <text class="box-text" x="800" y="867" text-anchor="middle">Docker Compose database</text>
+
+  <rect class="storage" x="1130" y="754" width="350" height="142" rx="18"/>
+  <text class="box-title" x="1305" y="802" text-anchor="middle">Named Volume</text>
+  <text class="box-text" x="1305" y="837" text-anchor="middle">cinema_postgres</text>
+  <text class="box-text" x="1305" y="867" text-anchor="middle">Persistent database files</text>
+
+  <path class="edge" d="M800 662 L800 704 L295 704 L295 754"/>
+  <text class="edge-label" x="540" y="696" text-anchor="middle">typed service calls</text>
+  <path class="edge" d="M470 825 L625 825"/>
+  <text class="edge-label" x="547" y="810" text-anchor="middle">SQL TCP 5433</text>
+  <path class="edge" d="M975 825 L1130 825"/>
+  <text class="edge-label" x="1052" y="810" text-anchor="middle">file storage</text>
+
+  <rect class="group" x="1080" y="646" width="450" height="82" rx="15"/>
+  <text class="small-title" x="1305" y="678" text-anchor="middle">Local fallback</text>
+  <text class="small-text" x="1305" y="706" text-anchor="middle">PGlite uses the same schema and migration</text>
+  <path class="edge-dashed" d="M470 790 C745 710 930 690 1080 690"/>
+</svg>
