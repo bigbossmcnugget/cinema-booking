@@ -124,6 +124,31 @@ void test('Faker seed has >=100 large-table rows, validated FKs and consistent t
   assert.equal(counts.tickets, 120);
   await assert.rejects(seedDatabase(connection.db), /empty database/);
 });
+void test('generated migration contains the required ORM indexes', async () => {
+  const required = [
+    'idx_bookings_screening',
+    'idx_bookings_user_created',
+    'idx_favorites_movie',
+    'idx_movie_genres_genre',
+    'idx_movies_filters',
+    'idx_movies_release',
+    'idx_movies_title',
+    'idx_notifications_booking',
+    'idx_notifications_user_created',
+    'idx_payments_booking',
+    'idx_screenings_hall_start',
+    'idx_screenings_movie_start',
+    'idx_tickets_booking',
+    'idx_tickets_seat',
+  ];
+  const indexes = resultRows<{ indexname: string }>(
+    await connection.db.execute(
+      sql`SELECT indexname FROM pg_indexes WHERE schemaname = 'public'`,
+    ),
+  ).map((row) => row.indexname);
+  for (const name of required)
+    assert(indexes.includes(name), `Missing ORM index: ${name}`);
+});
 void test('catalogue is read from the database with real daily screening times', async () => {
   const response = await fetch(`${base}/api/catalog?date=${day}`);
   const data = (await response.json()) as { movies: Movie[] };

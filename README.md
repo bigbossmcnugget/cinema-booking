@@ -127,7 +127,7 @@ npm run build
 ./node_modules/.bin/tsc --noEmit --incremental false
 ```
 
-Backend tests use an isolated in-memory PGlite database, apply migrations twice, compare original table/column names, verify row counts and consistency, exercise guest bookings, concurrent seat conflicts, bad JSON field types, forged price/role, orphan FKs and admin access. The persistent preview uses the same schema through PGlite.
+Backend tests use an isolated in-memory PGlite database, apply migrations twice, compare original table/column names, require every documented ORM index, verify row counts and consistency, exercise guest bookings, concurrent seat conflicts, bad JSON field types, forged price/role, orphan FKs and admin access. The persistent preview uses the same schema through PGlite.
 
 Guest reservations have no expiry worker, cancellation or payment flow yet. All existing tickets continue to occupy their seats; cancellation needs a deliberate release policy because the original unique constraint also includes cancelled tickets. Semantic hall/screening consistency is enforced by the booking service and verifier; individual FKs alone cannot prevent every inconsistent direct database edit. Registration, favorites, payments and notifications exist as database entities/demo data, not as completed site features. Production authentication, TLS, rate limiting and deployment remain future work.
 
