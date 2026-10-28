@@ -12,13 +12,13 @@
     "lint": "oxlint",
     "format": "oxfmt",
     "api:dev": "tsx backend/server.ts",
-    "api:local": "DB_DRIVER=pglite tsx backend/server.ts",
+    "api:local": "tsx backend/local.ts server",
     "pg:generate": "drizzle-kit generate --config backend/drizzle.config.ts",
     "pg:migrate": "tsx backend/migrate.ts",
     "pg:seed": "tsx backend/seed.ts",
     "pg:verify": "tsx backend/verify.ts",
     "test:backend": "tsx --test backend/backend.test.ts",
-    "demo:prepare": "DB_DRIVER=pglite tsx backend/prepare.ts"
+    "demo:prepare": "tsx backend/local.ts prepare"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",

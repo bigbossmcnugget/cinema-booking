@@ -49,7 +49,7 @@ npm run demo:prepare
 npm run api:local
 ```
 
-In another terminal run `npm run dev`. The local PostgreSQL files live in ignored `.data/postgres`. `demo:prepare` migrates and seeds an empty database; on later runs it preserves data and verifies it. Stop `api:local` before running a separate CLI process against the same PGlite directory: it is a single-process embedded database.
+In another terminal run `npm run dev`. These local commands are portable across Windows, macOS and Linux; the launcher selects PGlite without shell-specific environment syntax. The local PostgreSQL files live in ignored `.data/postgres`. `demo:prepare` migrates and seeds an empty database; on later runs it preserves data and verifies it. Stop `api:local` before running a separate CLI process against the same PGlite directory: it is a single-process embedded database.
 
 Seed screenings cover 21 days from the first seed. For a demonstration much later, create a separate new demo database or add future screenings through ORM; do not silently erase existing bookings. Faker's random seed is fixed, while screening dates intentionally depend on the day of the initial seed.
 
@@ -127,7 +127,7 @@ npm run build
 ./node_modules/.bin/tsc --noEmit --incremental false
 ```
 
-Backend tests use an isolated in-memory PGlite database, apply migrations twice, compare original table/column names, verify row counts and consistency, exercise guest bookings, concurrent seat conflicts, bad JSON field types, forged price/role, orphan FKs and admin access. The persistent preview uses the same schema through PGlite. Docker PostgreSQL commands are provided but could not be executed on this machine because Docker is not installed.
+Backend tests use an isolated in-memory PGlite database, apply migrations twice, compare original table/column names, verify row counts and consistency, exercise guest bookings, concurrent seat conflicts, bad JSON field types, forged price/role, orphan FKs and admin access. The persistent preview uses the same schema through PGlite.
 
 Guest reservations have no expiry worker, cancellation or payment flow yet. All existing tickets continue to occupy their seats; cancellation needs a deliberate release policy because the original unique constraint also includes cancelled tickets. Semantic hall/screening consistency is enforced by the booking service and verifier; individual FKs alone cannot prevent every inconsistent direct database edit. Registration, favorites, payments and notifications exist as database entities/demo data, not as completed site features. Production authentication, TLS, rate limiting and deployment remain future work.
 
